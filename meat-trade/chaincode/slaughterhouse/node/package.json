@@ -1,0 +1,14 @@
+{
+  "name": "slaughterhouse",
+  "version": "1.0.0",
+  "description": "Slaughterhouse chaincode",
+  "main": "slaughterhouse.js",
+  "scripts": {
+    "start": "node slaughterhouse.js"
+  },
+  "author": "rmorbach",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fabric-shim": "latest"
+  }
+}

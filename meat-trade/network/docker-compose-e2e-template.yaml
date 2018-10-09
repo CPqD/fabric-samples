@@ -1,0 +1,230 @@
+# Copyright CPqD All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.kingbeefcattle.com:
+  peer0.farm1.kingbeefcattle.com:
+  peer1.farm1.kingbeefcattle.com:
+  peer0.farm2.kingbeefcattle.com:
+  peer1.farm2.kingbeefcattle.com:
+  peer0.slaughterhouse.kingbeefcattle.com:
+  peer1.slaughterhouse.kingbeefcattle.com:
+  peer0.supermarket1.kingbeefcattle.com:
+  peer1.supermarket1.kingbeefcattle.com:
+  peer0.inspection1.kingbeefcattle.com:
+  peer1.inspection1.kingbeefcattle.com:
+  peer0.inspection2.kingbeefcattle.com:
+  peer1.inspection2.kingbeefcattle.com:
+
+networks:
+  kingbeefcattle:
+services:
+  ca0:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-farm1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.farm1.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA0_PRIVATE_KEY
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.farm1.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/farm1.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerFarm1MSP
+    networks:
+      - kingbeefcattle
+
+  ca1:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-farm2
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.farm2.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.farm2.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/farm2.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerFarm2
+    networks:
+      - kingbeefcattle
+
+  ca2:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-slaughterhouse
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.slaughterhouse.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.slaughterhouse.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/slaughterhouse.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerSlaughterhouse
+    networks:
+      - kingbeefcattle
+
+  ca3:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-supermarket1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.supermarket1.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
+    ports:
+      - "10054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.supermarket1.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/supermarket1.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerSupermarket1
+    networks:
+      - kingbeefcattle
+
+  ca4:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-inspection1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.inspection1.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY
+    ports:
+      - "11054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.inspection1.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/inspection1.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerInspection1
+    networks:
+      - kingbeefcattle
+
+  ca5:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-inspection2
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.inspection2.kingbeefcattle.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA5_PRIVATE_KEY
+    ports:
+      - "12054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.fiscalizador.kingbeefcattle.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/inspection2.kingbeefcattle.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerInspection2
+    networks:
+      - kingbeefcattle
+
+  orderer.kingbeefcattle.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.kingbeefcattle.com
+    container_name: orderer.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.farm1.kingbeefcattle.com:
+    container_name: peer0.farm1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.farm1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.farm1.kingbeefcattle.com:
+    container_name: peer1.farm1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.farm1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.farm2.kingbeefcattle.com:
+    container_name: peer0.farm2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.farm2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.farm2.kingbeefcattle.com:
+    container_name: peer1.farm2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.farm2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.slaughterhouse.kingbeefcattle.com:
+    container_name: peer0.slaughterhouse.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.slaughterhouse.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.slaughterhouse.kingbeefcattle.com:
+    container_name: peer1.slaughterhouse.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.slaughterhouse.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.supermarket1.kingbeefcattle.com:
+    container_name: peer0.supermarket1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.supermarket1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.supermarket1.kingbeefcattle.com:
+    container_name: peer1.supermarket1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.supermarket1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.inspection1.kingbeefcattle.com:
+    container_name: peer0.inspection1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.inspection1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.inspection1.kingbeefcattle.com:
+    container_name: peer1.inspection1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.inspection1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.inspection2.kingbeefcattle.com:
+    container_name: peer0.inspection2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.inspection2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.farm2.kingbeefcattle.com:
+    container_name: peer1.inspection2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.inspection2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle

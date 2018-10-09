@@ -1,0 +1,5 @@
+docker-compose-e2e.yaml
+channel-artifacts/*
+crypto-config/
+scripts/.env
+scripts/log.txt

@@ -1,0 +1,9 @@
+[
+    {
+        "name": "collectionSupermarket1PD",
+        "policy": "OR('SlaughterhouseMSP.member', 'Inspection1MSP.member', 'Inspection2MSP.member', 'Supermarket1MSP.member')",
+	    "requiredPeerCount": 0,
+	    "maxPeerCount": 2,
+	    "blockToLive":1000000
+    }
+]

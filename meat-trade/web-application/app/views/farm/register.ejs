@@ -1,0 +1,224 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Meat trade web application">
+    <meta name="author" content="">
+
+    <title>Register sale - Farm to Slaughterhouse</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../css/lib/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-blue fixed-top">
+        <a class="navbar-brand" href="/">Meat Trade</a>
+    </nav>
+
+    <div class="row main-content">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Register sale</span>                
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">                            
+                            Farm to Slaughterhouse <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/slaughterhouse/register">                            
+                            Slaughterhouse to Supermarket
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Query sales</span>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/farm/query">                            
+                            Farm to Slaughterhouse
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/slaughterhouse/register">                            
+                            Slaughterhouse to Supermarket
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-10 col-lg-10 col-sm-12 container">
+            <div class="alert" id="alert" role="alert">
+                <button type="button" class="close" onclick="hideAlert()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5></h5>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h3>Register sale from Farm to Slaughterhouse</h3>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <form onsubmit="return registerSale()" id="formRegisterCattle">
+                            <div class="form-group">
+                                <label>Seller *</label>
+                                <br />
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="farm" id="farm1" checked="checked"
+                                        value="Farm1">
+                                    <label class="form-check-label" for="farm1">Farm 1</label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="farm" id="farm2" value="Farm2">
+                                    <label class="form-check-label" for="farm2">Farm 2</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="invoiceNumber">Invoice number *</label>
+                                <input type="text" class="form-control" id="invoiceNumber" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Sale type *</label>
+                                <br />
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="saleType" id="saleTypePublic"
+                                        checked="checked" value="registerSale">
+                                    <label class="form-check-label" for="saleTypePublic">Public</label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="saleType" id="saleTypePrivate"
+                                        value="registerPrivateSale">
+                                    <label class="form-check-label" for="saleTypePublic">Private</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-success" type="submit">Register
+                                            sale</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                        <br />
+                        <hr class="my-6">
+
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <h4>Add cattle</h4>
+                                <form id="formAddCattle" onsubmit="return addCattle()">
+                                    <div class="form-group">
+                                        <label for="cattleId">Cattle identifier *</label>
+                                        <input type="text" class="form-control" id="cattleId" placeholder="" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="weight">Weight *</label>
+                                        <input type="number" class="form-control" id="weight" placeholder="" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="breed">Breed *</label>
+                                        <input type="text" class="form-control" id="breed" placeholder="" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="brucellosisVaccine">Last brucellosis vaccine *</label>
+                                        <input type="date" class="form-control" id="brucellosisVaccine" placeholder=""
+                                            required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="footAndMountVaccine">Last foot-and-mouth disease vaccine *</label>
+                                        <input type="date" class="form-control" id="footAndMountVaccine" placeholder=""
+                                            required>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="age">Age (months) *</label>
+                                        <input type="number" class="form-control" id="age" placeholder="" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="class">Class *</label>
+                                        <input type="text" class="form-control" id="class" placeholder="" required>
+                                    </div>
+
+                                    <label>Production system *</label>
+                                    <br />
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="productionSystem"
+                                                checked="checked" id="productionSystem1" value="Confinement">
+                                            <label class="form-check-label" for="productionSystem1">Confinement</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="productionSystem" id="productionSystem2"
+                                                value="Semi-confinement">
+                                            <label class="form-check-label" for="productionSystem2">Semi-confinement</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="productionSystem" id="productionSystem3"
+                                                value="Grazing">
+                                            <label class="form-check-label" for="productionSystem3">Grazing</label>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-primary" type="submit">Add cattle</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <br />
+                        <hr class="my-6">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <h4>Added cattle</h4>
+                                <div class="form-group">
+                                    <table id="addedCattle" class="table table-striped">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Id</th>
+                                                <th scope="col">Weight</th>
+                                                <th scope="col">Breed</th>
+                                                <th scope="col">Brucellosis vaccine</th>
+                                                <th scope="col">Foot-and-mouth vaccine</th>
+                                                <th scope="col">Age</th>
+                                                <th scope="col">Class</th>
+                                                <th scope="col">Production system</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main><!-- /.container -->
+    </div>    
+    <script src="../js/main.js"></script>
+    <script src="../js/farm/registerSale.js"></script>
+</body>
+
+</html>

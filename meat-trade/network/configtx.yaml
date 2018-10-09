@@ -1,0 +1,138 @@
+# Copyright CPqD All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+Organizations:
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+
+        MSPDir: crypto-config/ordererOrganizations/kingbeefcattle.com/msp
+
+    - &Farm1MSP
+        Name: Farm1MSP
+        ID: Farm1MSP
+
+        MSPDir: crypto-config/peerOrganizations/farm1.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.farm1.kingbeefcattle.com
+              Port: 7051
+
+    - &Farm2
+        Name: Farm2MSP
+        ID: Farm2MSP
+
+        MSPDir: crypto-config/peerOrganizations/farm2.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.farm2.kingbeefcattle.com
+              Port: 7051
+
+    - &Slaughterhouse
+        Name: SlaughterhouseMSP
+        ID: SlaughterhouseMSP
+
+        MSPDir: crypto-config/peerOrganizations/slaughterhouse.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.slaughterhouse.kingbeefcattle.com
+              Port: 7051
+
+    - &Supermarket1
+        Name: Supermarket1MSP
+        ID: Supermarket1MSP
+
+        MSPDir: crypto-config/peerOrganizations/supermarket1.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.supermarket1.kingbeefcattle.com
+              Port: 7051
+
+    - &Inspection1
+        Name: Inspection1MSP
+        ID: Inspection1MSP
+
+        MSPDir: crypto-config/peerOrganizations/inspection1.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.inspection1.kingbeefcattle.com
+              Port: 7051
+
+    - &Inspection2
+        Name: Inspection2MSP
+        ID: Inspection2MSP
+
+        MSPDir: crypto-config/peerOrganizations/inspection2.kingbeefcattle.com/msp
+
+        AnchorPeers:
+            - Host: peer0.inspection2.kingbeefcattle.com
+              Port: 7051
+
+Capabilities:
+    Global: &ChannelCapabilities
+        V1_1: true
+
+    Orderer: &OrdererCapabilities
+        V1_1: true
+
+    Application: &ApplicationCapabilities
+        V1_2: true
+
+Application: &ApplicationDefaults
+    Organizations:
+
+Orderer: &OrdererDefaults
+    OrdererType: solo
+
+    Addresses:
+        - orderer.kingbeefcattle.com:7050
+
+    BatchTimeout: 2s
+
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        Brokers:
+            - 127.0.0.1:9092
+
+    Organizations:
+
+Profiles:
+
+    SixOrgsOrdererGenesis:
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Farm1MSP
+                    - *Farm2
+                    - *Slaughterhouse
+                    - *Supermarket1
+                    - *Inspection1
+                    - *Inspection2
+    SixOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Farm1MSP
+                - *Farm2
+                - *Slaughterhouse
+                - *Supermarket1
+                - *Inspection1
+                - *Inspection2
+            Capabilities:
+                <<: *ApplicationCapabilities

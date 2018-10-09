@@ -1,0 +1,59 @@
+# Copyright CPqD All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+OrdererOrgs:
+  - Name: Orderer
+    Domain: kingbeefcattle.com
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: Farm1MSP
+    Domain: farm1.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Farm2
+    Domain: farm2.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Slaughterhouse
+    Domain: slaughterhouse.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Supermarket1
+    Domain: supermarket1.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Inspection1
+    Domain: inspection1.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Inspection2
+    Domain: inspection2.kingbeefcattle.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1

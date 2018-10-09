@@ -1,0 +1,75 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Meat trade web application">
+  <meta name="author" content="">
+
+  <title>Meat Trade</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-blue fixed-top">
+    <a class="navbar-brand" href="/">Meat Trade</a>
+  </nav>
+
+  <div class="row main-content">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Register sale</span>
+          <a class="d-flex align-items-center text-muted" href="#">            
+          </a>
+        </h6>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="farm/register">              
+              Farm to Slaughterhouse
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/slaughterhouse/register">              
+              Slaughterhouse to Supermarket
+            </a>
+          </li>          
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Query sales</span>          
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="/farm/query">              
+              Farm to Slaughterhouse
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/slaughterhouse/register">              
+              Slaughterhouse to Supermarket
+            </a>
+          </li>          
+        </ul>
+      </div>
+    </nav>
+    <main role="main" class="col-md-10 col-lg-10 col-sm-12 container">
+
+      <div class="home-message">
+        <h1>Meat Trade Web Application</h1>
+        <p class="lead">This application consomes the REST API provided by Go middleware.<br> Use sidebar menu options
+          to
+          run operations on the ledger.</p>
+      </div>
+
+    </main><!-- /.container -->
+  </div>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

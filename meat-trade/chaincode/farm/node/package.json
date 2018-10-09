@@ -1,0 +1,14 @@
+{
+  "name": "farm",
+  "version": "1.0.0",
+  "description": "Farm chaincode",
+  "main": "farm.js",
+  "scripts": {
+    "start": "node farm.js"
+  },
+  "author": "rmorbach",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fabric-shim": "latest"
+  }
+}

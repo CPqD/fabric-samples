@@ -1,0 +1,471 @@
+#
+# Copyright 2018 CPqD. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+
+#
+# Schema version of the content. Used by the SDK to apply the corresponding parsing rules.
+#
+version: 1.0.0
+
+#
+# The client section used by GO SDK.
+#
+client:
+
+  # Which organization does this application instance belong to? The value must be the name of an org
+  # defined under "organizations"
+  organization: slaughterhouse
+
+  logging:
+    level: info
+
+  # Root of the MSP directories with keys and certs.
+  cryptoconfig:
+    path: /crypto-config
+
+  # Some SDKs support pluggable KV stores, the properties under "credentialStore"
+  # are implementation specific
+  credentialStore:
+    # [Optional]. Used by user store. Not needed if all credentials are embedded in configuration
+    # and enrollments are performed elswhere.
+    path: "/tmp/kingbeefcattlestore"
+
+    # [Optional]. Specific to the CryptoSuite implementation used by GO SDK. Software-based implementations
+    # requiring a key store. PKCS#11 based implementations does not.
+    cryptoStore:
+      # Specific to the underlying KeyValueStore that backs the crypto key store.
+      path: /tmp/msp
+
+   # BCCSP config for the client. Used by GO SDK.
+  BCCSP:
+    security:
+     enabled: true
+     default:
+      provider: "SW"
+     hashAlgorithm: "SHA2"
+     softVerify: true
+     level: 256
+
+  tlsCerts:
+    # [Optional]. Use system certificate pool when connecting to peers, orderers (for negotiating TLS) Default: false
+    systemCertPool: false
+
+#
+# [Optional]. But most apps would have this section so that channel objects can be constructed
+# based on the content below. If an app is creating channels, then it likely will not need this
+# section.
+#
+channels:
+  # name of the channel
+  kingbeefcattlechannel:
+    # Required. list of orderers designated by the application to use for transactions on this
+    # channel. This list can be a result of access control ("org1" can only access "ordererA"), or
+    # operational decisions to share loads from applications among the orderers.  The values must
+    # be "names" of orgs defined under "organizations/peers"
+    # deprecated: not recommended, to override any orderer configuration items, entity matchers should be used.
+    #    orderers:
+    #      - orderer.example.com
+
+    # Required. list of peers from participating orgs
+    peers:
+      peer0.slaughterhouse.kingbeefcattle.com:
+        # [Optional]. will this peer be sent transaction proposals for endorsement? The peer must
+        # have the chaincode installed. The app can also use this property to decide which peers
+        # to send the chaincode install request. Default: true
+        endorsingPeer: true
+
+        # [Optional]. will this peer be sent query proposals? The peer must have the chaincode
+        # installed. The app can also use this property to decide which peers to send the
+        # chaincode install request. Default: true
+        chaincodeQuery: true
+
+        # [Optional]. will this peer be sent query proposals that do not require chaincodes, like
+        # queryBlock(), queryTransaction(), etc. Default: true
+        ledgerQuery: true
+
+        # [Optional]. will this peer be the target of the SDK's listener registration? All peers can
+        # produce events but the app typically only needs to connect to one to listen to events.
+        # Default: true
+        eventSource: true
+
+    # [Optional]. The application can use these options to perform channel operations like retrieving channel
+    # config etc.
+    policies:
+      #[Optional] options for retrieving channel configuration blocks
+      queryChannelConfig:
+        #[Optional] min number of success responses (from targets/peers)
+        minResponses: 1
+        #[Optional] channel config will be retrieved for these number of random targets
+        maxTargets: 1
+        #[Optional] retry options for query config block
+        retryOpts:
+          #[Optional] number of retry attempts
+          attempts: 5
+          #[Optional] the back off interval for the first retry attempt
+          initialBackoff: 500ms
+          #[Optional] the maximum back off interval for any retry attempt
+          maxBackoff: 5s
+          #[Optional] he factor by which the initial back off period is exponentially incremented
+          backoffFactor: 2.0
+
+#
+# list of participating organizations in this network
+#
+organizations:
+  slaughterhouse:
+    mspid: SlaughterhouseMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/slaughterhouse.kingbeefcattle.com/users/{userName}@slaughterhouse.kingbeefcattle.com/msp
+
+    peers:
+      - peer0.slaughterhouse.kingbeefcattle.com
+      - peer1.slaughterhouse.kingbeefcattle.com
+
+  farm1:
+    mspid: Farm1MSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/farm1.kingbeefcattle.com/users/{userName}@farm1.kingbeefcattle.com/msp
+
+    peers:
+      - peer0.farm1.kingbeefcattle.com
+      - peer1.farm1.kingbeefcattle.com
+    
+  farm2:
+    mspid: Farm2MSP
+        
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath: peerOrganizations/farm2.kingbeefcattle.com/users/{userName}@farm2.kingbeefcattle.com/msp
+    peers:
+      - peer0.farm2.kingbeefcattle.com
+      - peer1.farm2.kingbeefcattle.com
+    
+
+  inspection1:
+    mspid: Inspection1MSP
+    cryptoPath: peerOrganizations/inspection1.kingbeefcattle.com/users/{userName}@inspection1.kingbeefcattle.com/msp
+    peers:
+      - peer0.inspection1.kingbeefcattle.com
+      - peer1.inspection1.kingbeefcattle.com
+
+  inspection2:
+    mspid: Inspection2MSP
+        
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath: peerOrganizations/inspection2.kingbeefcattle.com/users/{userName}@inspection2.kingbeefcattle.com/msp
+    peers:
+      - peer0.inspection2.kingbeefcattle.com
+      - peer1.inspection2.kingbeefcattle.com
+
+  supermarket1:
+    mspid: Supermarket1MSP
+        
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath: peerOrganizations/supermarket1.kingbeefcattle.com/users/{userName}@supermarket1.kingbeefcattle.com/msp
+    peers:
+      - peer0.supermarket1.kingbeefcattle.com
+      - peer1.supermarket1.kingbeefcattle.com
+
+#
+# List of orderers to send transaction and channel create/update requests to. For the time
+# being only one orderer is needed. If more than one is defined, which one get used by the
+# SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.
+#
+orderers:
+  orderer.kingbeefcattle.com:
+    url: orderer.kingbeefcattle.com:7050
+
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/ordererOrganizations/kingbeefcattle.com/tlsca/tlsca.kingbeefcattle.com-cert.pem
+
+#
+# List of peers to send various requests to, including endorsement, query
+# and event listener registration.
+#
+peers:
+  #Set up peers of Slaughterhouse
+  peer0.slaughterhouse.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.slaughterhouse.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.slaughterhouse.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.slaughterhouse.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/slaughterhouse.kingbeefcattle.com/tlsca/tlsca.slaughterhouse.kingbeefcattle.com-cert.pem
+
+  peer1.slaughterhouse.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.slaughterhouse.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.slaughterhouse.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.slaughterhouse.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/slaughterhouse.kingbeefcattle.com/tlsca/tlsca.slaughterhouse.kingbeefcattle.com-cert.pem
+
+  #Set up peers of Farm1
+  peer0.farm1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.farm1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.farm1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.farm1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/farm1.kingbeefcattle.com/tlsca/tlsca.farm1.kingbeefcattle.com-cert.pem
+
+  peer1.farm1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.farm1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.farm1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.farm1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/farm1.kingbeefcattle.com/tlsca/tlsca.farm1.kingbeefcattle.com-cert.pem
+
+  #Set up peers of Farm2
+  peer0.farm2.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.farm2.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.farm2.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.farm2.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/farm2.kingbeefcattle.com/tlsca/tlsca.farm2.kingbeefcattle.com-cert.pem
+
+  peer1.farm2.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.farm2.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.farm2.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.farm2.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/farm2.kingbeefcattle.com/tlsca/tlsca.farm2.kingbeefcattle.com-cert.pem
+
+  #Set up peers of Inspection1
+  peer0.inspection1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.inspection1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.inspection1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.inspection1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/inspection1.kingbeefcattle.com/tlsca/tlsca.inspection1.kingbeefcattle.com-cert.pem
+
+  peer1.inspection1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.inspection1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.inspection1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.inspection1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/inspection1.kingbeefcattle.com/tlsca/tlsca.inspection1.kingbeefcattle.com-cert.pem
+
+  #Set up peers of Inspection2
+  peer0.inspection2.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.inspection2.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.inspection2.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.inspection2.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/inspection2.kingbeefcattle.com/tlsca/tlsca.inspection2.kingbeefcattle.com-cert.pem
+
+  peer1.inspection2.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.inspection2.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.inspection2.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.inspection2.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/inspection2.kingbeefcattle.com/tlsca/tlsca.inspection2.kingbeefcattle.com-cert.pem      
+      
+  #Set up peers of Supermarket1
+  peer0.supermarket1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer0.supermarket1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer0.supermarket1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer0.supermarket1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/supermarket1.kingbeefcattle.com/tlsca/tlsca.supermarket1.kingbeefcattle.com-cert.pem
+
+  peer1.supermarket1.kingbeefcattle.com:
+    # this URL is used to send endorsement and query requests
+    url: peer1.supermarket1.kingbeefcattle.com:7051
+    # eventUrl is only needed when using eventhub (default is delivery service)
+    eventUrl: peer1.supermarket1.kingbeefcattle.com:7053
+
+    grpcOptions:
+      ssl-target-name-override: peer1.supermarket1.kingbeefcattle.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: true
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /crypto-config/peerOrganizations/supermarket1.kingbeefcattle.com/tlsca/tlsca.supermarket1.kingbeefcattle.com-cert.pem      

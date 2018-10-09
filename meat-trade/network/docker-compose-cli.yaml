@@ -1,0 +1,175 @@
+# Copyright CPqD All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.kingbeefcattle.com:
+  peer0.farm1.kingbeefcattle.com:
+  peer1.farm1.kingbeefcattle.com:
+  peer0.farm2.kingbeefcattle.com:
+  peer1.farm2.kingbeefcattle.com:
+  peer0.slaughterhouse.kingbeefcattle.com:
+  peer1.slaughterhouse.kingbeefcattle.com:
+  peer0.supermarket1.kingbeefcattle.com:
+  peer1.supermarket1.kingbeefcattle.com:
+  peer0.inspection1.kingbeefcattle.com:
+  peer1.inspection1.kingbeefcattle.com:
+  peer0.inspection2.kingbeefcattle.com:
+  peer1.inspection2.kingbeefcattle.com:
+
+networks:
+  kingbeefcattle:
+
+services:
+
+  orderer.kingbeefcattle.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.kingbeefcattle.com
+    container_name: orderer.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.farm1.kingbeefcattle.com:
+    container_name: peer0.farm1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.farm1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.farm1.kingbeefcattle.com:
+    container_name: peer1.farm1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.farm1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.farm2.kingbeefcattle.com:
+    container_name: peer0.farm2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.farm2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.farm2.kingbeefcattle.com:
+    container_name: peer1.farm2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.farm2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.slaughterhouse.kingbeefcattle.com:
+    container_name: peer0.slaughterhouse.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.slaughterhouse.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+  
+  peer1.slaughterhouse.kingbeefcattle.com:
+    container_name: peer1.slaughterhouse.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.slaughterhouse.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.supermarket1.kingbeefcattle.com:
+    container_name: peer0.supermarket1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.supermarket1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.supermarket1.kingbeefcattle.com:
+    container_name: peer1.supermarket1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.supermarket1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.inspection1.kingbeefcattle.com:
+    container_name: peer0.inspection1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.inspection1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.inspection1.kingbeefcattle.com:
+    container_name: peer1.inspection1.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.inspection1.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer0.inspection2.kingbeefcattle.com:
+    container_name: peer0.inspection2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.inspection2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  peer1.inspection2.kingbeefcattle.com:
+    container_name: peer1.inspection2.kingbeefcattle.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.inspection2.kingbeefcattle.com
+    networks:
+      - kingbeefcattle
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.slaughterhouse.kingbeefcattle.com:7051
+      - CORE_PEER_LOCALMSPID=SlaughterhouseMSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/slaughterhouse.kingbeefcattle.com/peers/peer0.slaughterhouse.kingbeefcattle.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/slaughterhouse.kingbeefcattle.com/peers/peer0.slaughterhouse.kingbeefcattle.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/slaughterhouse.kingbeefcattle.com/peers/peer0.slaughterhouse.kingbeefcattle.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/slaughterhouse.kingbeefcattle.com/users/Admin@slaughterhouse.kingbeefcattle.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - $GOPATH/src/github.com/hyperledger/fabric/:/opt/gopath/src/github.com/hyperledger/fabric
+        - $GOPATH/src/github.com/gogo/:/opt/gopath/src/github.com/gogo
+        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.kingbeefcattle.com
+      - peer0.farm1.kingbeefcattle.com
+      - peer1.farm1.kingbeefcattle.com
+      - peer0.farm2.kingbeefcattle.com
+      - peer1.farm2.kingbeefcattle.com
+      - peer0.slaughterhouse.kingbeefcattle.com
+      - peer1.slaughterhouse.kingbeefcattle.com
+      - peer0.supermarket1.kingbeefcattle.com
+      - peer1.supermarket1.kingbeefcattle.com
+      - peer0.inspection1.kingbeefcattle.com
+      - peer1.inspection1.kingbeefcattle.com
+      - peer0.inspection2.kingbeefcattle.com
+      - peer1.inspection2.kingbeefcattle.com
+
+    networks:
+      - kingbeefcattle

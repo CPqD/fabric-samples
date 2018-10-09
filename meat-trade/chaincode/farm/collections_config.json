@@ -1,0 +1,17 @@
+[
+    {
+        "name": "collectionFarm2PD",
+        "policy": "OR('SlaughterhouseMSP.member', 'Inspection1MSP.member', 'Farm2MSP.member')",
+	    "requiredPeerCount": 0,
+	    "maxPeerCount": 2,
+	    "blockToLive":1000000
+    },
+    {
+        "name": "collectionFarm1PD",
+        "policy": "OR('SlaughterhouseMSP.member', 'Inspection1MSP.member', 'Farm1MSP.member')",
+	    "requiredPeerCount": 0,
+	    "maxPeerCount": 2,
+	    "blockToLive":1000000
+    } 
+
+]
