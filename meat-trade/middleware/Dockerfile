@@ -1,5 +1,5 @@
 FROM golang:latest
-
+  
 RUN go get github.com/gorilla/mux && \
     go get github.com/hyperledger/fabric-sdk-go/ && \
     go get github.com/pkg/errors && \
@@ -25,6 +25,17 @@ RUN go get github.com/gorilla/mux && \
     go get google.golang.org/grpc/credentials && \
     go get google.golang.org/grpc/keepalive && \
     go get google.golang.org/grpc/peer && \
-    go get google.golang.org/grpc/status
+    go get google.golang.org/grpc/status && \
+    go get github.com/Knetic/govaluate  && \
+    go get github.com/go-kit/kit/metrics  && \
+    go get github.com/go-kit/kit/metrics/prometheus  && \
+    go get github.com/go-kit/kit/metrics/statsd  && \
+    go get github.com/gogo/protobuf/proto  && \
+    go get github.com/hyperledger/fabric-lib-go/healthz  && \
+    go get github.com/prometheus/client_golang/prometheus  && \
+    go get github.com/prometheus/client_golang/prometheus/promhttp && \
+    cd $GOPATH/src/github.com/go-kit/kit && \
+    git fetch --tags && \
+    git checkout v0.8.0
 
 WORKDIR /src
